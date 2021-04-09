@@ -55,6 +55,5 @@ flutter run
 - Forms and validations;
 
 ## 6. References
-[1] Flutter - Available on https://flutter.dev/;
-
-[2] Material Design - Available on https://material.io/;
+1. Flutter - Available on https://flutter.dev/;
+2. Material Design - Available on https://material.io/;
