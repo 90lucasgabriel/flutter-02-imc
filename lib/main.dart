@@ -12,6 +12,52 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  String _result = "Informe seus dados";
+
+  void _handleResetFields() {
+    weightController.text = "";
+    heightController.text = "";
+
+    setState(() {
+      _result = "Informe seus dados";
+    });
+  }
+
+  void _calculateImc() {
+    double weight = double.parse(weightController.text);
+    double height = double.parse(heightController.text) / 100;
+    double response = weight / (height * height);
+
+    setState(() {
+      _result = _checkResultImc(response);
+    });
+  }
+
+  String _checkResultImc(double imc) {
+    String parsedImc = imc.toStringAsPrecision(3);
+
+    if (imc < 18.6) {
+      return "Abaixo do peso ($parsedImc)";
+    }
+    if (imc >= 18.6 && imc < 24.9) {
+      return "Peso ideal ($parsedImc)";
+    }
+    if (imc >= 24.9 && imc < 29.9) {
+      return "Levemente acima do peso ($parsedImc)";
+    }
+    if (imc >= 29.9 && imc < 34.9) {
+      return "Obseidade Grau I ($parsedImc)";
+    }
+    if (imc >= 34.9 && imc < 39.9) {
+      return "Obseidade Grau II ($parsedImc)";
+    }
+
+    return "Obseidade Grau III ($parsedImc)";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +68,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {},
+            onPressed: _handleResetFields,
           ),
         ],
       ),
@@ -48,6 +94,7 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
                 fontSize: 25,
               ),
+              controller: weightController,
             ),
             TextField(
               keyboardType: TextInputType.number,
@@ -60,13 +107,14 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
                 fontSize: 25,
               ),
+              controller: heightController,
             ),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 10),
               child: Container(
                 height: 50.0,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _calculateImc,
                   child: Text(
                     "Calcular",
                     style: TextStyle(fontSize: 25.0),
@@ -83,7 +131,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Text(
-              "Resultado",
+              _result,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 25.0,
